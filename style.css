@@ -1,0 +1,17 @@
+/* styles.css for textual app
+Screen {
+    background: #000000;
+    color: #FFFFFF;
+}
+#chat-log {
+    border: heavy white;
+}
+#peer-list {
+    border: heavy cyan;
+}
+#status-bar {
+    color: yellow;
+}
+#message-input {
+    border: heavy green;
+} 
