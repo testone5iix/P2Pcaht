@@ -64,7 +64,7 @@ pip install cryptography textual pyperclip
 
 ## Setup
 
-1. Clone from https://github.com/testone5iix/P2Pchat
+1. Clone from https://github.com/testone5iix/P2Pcaht.git
 2. Ensure Tor and Python are installed
 3. Run:
    ```bash
