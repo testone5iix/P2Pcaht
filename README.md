@@ -67,23 +67,23 @@ pip install -r requirements.txt
 
 ## Setup
 
-1. Clone from https://github.com/testone5iix/P2Pcaht.git
+1. Clone from https://github.com/testone5iix/SecureP2PChat.git
 2. Ensure Tor and Python are installed
 3. Run:
    ```bash
-   python3 p2pchat.py
+   python3 SecureP2P.py
    ```
 
 ## Usage
 
-- Start: `python3 p2pchat.py`
+- Start: `python3 SecureP2P.py`
 - Connect: `/connect <onion_address>`
 - Send messages: Type and press Enter
 - Commands: `/connect`, `/peers`, `/verify`, `/stats`, `/onion`, `/copyonion`, `/quit`, `/help`
 
 ## Configuration
 
-Edit constants in `p2pchat.py`:
+Edit constants in `SecureP2P.py`:
 - `TCP_PORT`: 37021
 - `KEY_ROTATION_INTERVAL`: 3600s
 - `RATE_LIMIT_WINDOW`: 10s
