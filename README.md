@@ -60,6 +60,9 @@ A decentralized, privacy-focused P2P chat application using Tor hidden services,
 
 ```bash
 pip install cryptography textual pyperclip
+or (if you prefer using a requirements file)
+pip install -r requirements.txt
+
 ```
 
 ## Setup
