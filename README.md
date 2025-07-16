@@ -109,6 +109,3 @@ Edit constants in `p2pchat.py`:
 - **Connection Issues**: Confirm onion address/port
 - **Dependencies**: Ensure `cryptography`, `textual`, `pyperclip` are installed
 
-## License
-
-MIT License
