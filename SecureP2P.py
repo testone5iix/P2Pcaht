@@ -1615,10 +1615,19 @@ class ChatApp(App):
         self.exit()
 
 if __name__ == "__main__":
-    app = ChatApp()
+    try:
+        app = ChatApp()
+    except FileNotFoundError:
+        print("\n[!] Tor not found.")
+        print("Download Tor and place tor.exe in the same folder as this program,")
+        print("or install Tor and add it to your PATH, then run again.\n")
+        input("Press Enter to exit...")
+        sys.exit(1)
+
     install_graceful_shutdown_handlers(app, show_ui_notice=True)
     try:
         app.run()
     except KeyboardInterrupt:
         logger.warning("KeyboardInterrupt top-level.")
+
 
