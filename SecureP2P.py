@@ -38,6 +38,57 @@ from textual.widgets import Footer, Header, Input, Static
 from textual.widgets import Footer, Header, Input, RichLog
 from rich.text import Text
 
+import signal
+import asyncio
+
+_shutdown_triggered = False 
+
+def install_graceful_shutdown_handlers(app, *, show_ui_notice: bool = True):
+
+    def _ui_notice_threadsafe(msg: str, security: bool) -> None:
+        if not show_ui_notice:
+            return
+        try:
+            app.call_from_thread(app.show_status, msg, security=security)
+        except Exception:
+            pass
+
+    def _shutdown_threadsafe(sig_label: str) -> None:
+        global _shutdown_triggered
+        if _shutdown_triggered:
+            return
+        _shutdown_triggered = True
+        logger.warning("Initiating graceful shutdown from %s.", sig_label)
+        _ui_notice_threadsafe(f"{sig_label} received – shutting down…", True)
+        try:
+            app.call_from_thread(app.exit)
+        except Exception:
+            # fallback
+            try:
+                app.exit()
+            except Exception:
+                logger.exception("Failed to exit app in signal handler.")
+
+    def _make_handler(sig_label: str):
+        def _handler(sig, frame):
+            logger.warning("%s received.", sig_label)
+            _shutdown_threadsafe(sig_label)
+        return _handler
+
+    for sig_name in ("SIGINT", "SIGTERM", "SIGHUP", "SIGQUIT"):
+        if hasattr(signal, sig_name):
+            try:
+                signal.signal(getattr(signal, sig_name), _make_handler(sig_name))
+            except Exception:
+                pass
+
+    # Windows: Fn+B / Ctrl+Break
+    if hasattr(signal, "SIGBREAK"):
+        try:
+            signal.signal(signal.SIGBREAK, _make_handler("SIGBREAK"))
+        except Exception:
+            pass
+
 # Constants
 TCP_PORT = 37021
 NONCE_SIZE = 12  # Correct for ChaCha20Poly1305
@@ -1565,4 +1616,9 @@ class ChatApp(App):
 
 if __name__ == "__main__":
     app = ChatApp()
-    app.run()
+    install_graceful_shutdown_handlers(app, show_ui_notice=True)
+    try:
+        app.run()
+    except KeyboardInterrupt:
+        logger.warning("KeyboardInterrupt top-level.")
+
